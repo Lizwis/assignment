@@ -3,7 +3,10 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\PostController;
+use App\Http\Controllers\Post\PostController;
+
+use App\Http\Controllers\User\UserController;
+
 
 
 /*
@@ -24,4 +27,8 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 Route::group(['prefix' => 'post'], function () {
     Route::get('/all', [PostController::class, 'index']);
     Route::get('/show/{postId}', [PostController::class, 'show']);
+});
+
+Route::group(['prefix' => 'user'], function () {
+    Route::get('/show/{user_id}', [UserController::class, 'show']);
 });
