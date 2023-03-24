@@ -6,7 +6,7 @@ use App\Models\User;
 
 
 use App\Repositories\User\UserRepositoryInterface;
-use App\Http\Resources\PostsResource;
+use App\Http\Resources\UserResource;
 
 
 class UserRepository implements UserRepositoryInterface
@@ -14,9 +14,7 @@ class UserRepository implements UserRepositoryInterface
     public function getUserByid($user_id)
     {
         $user = User::where('id', $user_id)->first();
-
-        return response()->json([
-            $user, 200
-        ]);
+        $userCollection =    new UserResource($user);
+        return $userCollection;
     }
 }

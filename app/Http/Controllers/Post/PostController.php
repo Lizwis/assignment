@@ -2,33 +2,50 @@
 
 namespace App\Http\Controllers\Post;
 
-use Illuminate\Http\Request;
 use App\Repositories\Post\PostRepositoryInterface;
 
 use App\Http\Controllers\Controller;
+use App\Services\ApiLogger;
+use Illuminate\Http\Response;
 
 
 class PostController extends Controller
 {
-    private $postRepository;
+    private $postRepository, $logger;
 
-    public function __construct(PostRepositoryInterface $postRepository)
+
+    public function __construct(PostRepositoryInterface $postRepository, ApiLogger $logger)
     {
         $this->postRepository = $postRepository;
+        $this->logger = $logger;
     }
 
     public function index()
     {
         $posts = $this->postRepository->all();
 
-        return $posts;
+        $this->saveLogs($posts);
+
+        return $posts->response()
+            ->setStatusCode(Response::HTTP_OK);
     }
 
     public function show($postId)
     {
-
         $post = $this->postRepository->findPostByid($postId);
 
-        return $post;
+        $this->saveLogs($post);
+
+        return $post->response()
+            ->setStatusCode(Response::HTTP_OK);
+    }
+
+
+    private function saveLogs($data)
+    {
+        $response = new Response([$data]);
+        $responseContent = $response->getContent();
+
+        $this->logger->log(request()->url(), $responseContent);
     }
 }
