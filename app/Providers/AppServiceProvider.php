@@ -20,9 +20,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(StorageGatewayInterface::class, function () {
             // Use database storage gateway
             // return new DatabaseStorageGateway();
+            return new DatabaseStorageGateway();
 
             // Use file storage gateway
-            return new DatabaseStorageGateway();
+            // return new FileStorageGateway();
+
         });
 
         $this->app->singleton(ApiLogger::class, function () {
