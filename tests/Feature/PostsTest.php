@@ -1,54 +1,95 @@
 <?php
 
-namespace Tests\Feature;
-
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\Response;
 use Tests\TestCase;
+use App\Models\Post; // use App\Models instead of App
+use App\Models\Comment;
+use App\Models\User;
+use App\Models\Category;
 
-use App\Repositories\Post\PostRepositoryInterface;
+
+
 
 class PostsTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testIndex()
+    public function test_index_method_returns_paginated_post_collection_with_comments()
     {
-        // Create a mock of PostRepositoryInterface and configure it to return a dummy list of posts
-        $mockRepository = $this->getMockBuilder(PostRepositoryInterface::class)
-            ->getMock();
-        $mockRepository->expects($this->once())
-            ->method('all')
-            ->willReturn(['post1', 'post2']);
+        // Create test data
+        $category = Category::factory()->count(10)->create();
+        $users = user::factory()->count(10)->create();
 
-        // Bind the mock repository to the app container
-        $this->app->instance(PostRepositoryInterface::class, $mockRepository);
+        $posts = Post::factory()->count(10)->create();
 
-        // Call the /post/all route and assert that it returns the dummy list of posts
+        foreach ($posts as $post) {
+            Comment::factory()->count(5)->create(['post_id' => $post->id, 'user_id' => $post->id]);
+        }
+
+        // Call the all method
         $response = $this->get('/api/post/all');
-        $response->assertStatus(200);
-        $response->assertExactJson(['post1', 'post2']);
+
+        // Assert the response
+        $response->assertOk();
+        $response->assertJsonCount(5, 'data');
+        $response->assertJsonStructure([
+            'data' => [
+                [
+
+                    'id',
+                    'title',
+                    'content',
+                    'category_id',
+                    'user_id',
+                    'created_at',
+                    'updated_at',
+                    'comments' => [
+                        '*' => [
+                            'id',
+                            'user_id',
+                            'post_id',
+                            'content',
+                            'created_at',
+                            'updated_at',
+                        ],
+                    ],
+                ],
+            ],
+            'links',
+            'meta',
+        ]);
     }
 
-    public function testShow()
+    public function test_show_method_returns_correct_post_data()
     {
-        $postId = 1;
-        $post = ['id' => 1, 'user_id' => 1, 'category_id' => 1, 'title' => 'Test post', 'content' => 'Test body'];
+        $category = Category::factory()->create();
+        $user = user::factory()->create();
 
-        // Create a mock of PostRepositoryInterface and configure it to return a dummy post
-        $mockRepository = $this->getMockBuilder(PostRepositoryInterface::class)
-            ->getMock();
-        $mockRepository->expects($this->once())
-            ->method('findPostByid')
-            ->with($postId)
-            ->willReturn($post);
+        $post = Post::factory()->create(['category_id' => $category->id, 'user_id' => $user->id]);
 
-        // Bind the mock repository to the app container
-        $this->app->instance(PostRepositoryInterface::class, $mockRepository);
+        $comment = Comment::factory()->create(['post_id' => $post->id, 'user_id' => $user->id]);
 
-        // Call the /post/show/{postId} route with the dummy post ID and assert that it returns the dummy post
-        $response = $this->get("/api/post/show/{$postId}");
-        $response->assertStatus(200);
-        $response->assertExactJson($post);
+        $response = $this->get("/api/post/show/{$post->id}");
+
+        $response->assertJson([
+            'data' => [
+
+                'id' => $post->id,
+                'title' => $post->title,
+                'content' => $post->content,
+                'category_id' => $category->id,
+                'user_id' => $user->id,
+                'comments' => [
+                    [
+                        'id' => $comment->id,
+                        'user_id' => $user->id,
+                        'post_id' => $post->id,
+                        'content' => $comment->content
+                    ]
+                ]
+            ],
+        ]);
     }
 }

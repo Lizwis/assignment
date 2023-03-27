@@ -8,6 +8,9 @@ use App\Http\Controllers\Controller;
 use App\Services\ApiLogger;
 use Illuminate\Http\Response;
 
+use App\Http\Resources\PostsResource;
+use App\Models\Post;
+
 
 class PostController extends Controller
 {
@@ -23,11 +26,10 @@ class PostController extends Controller
     public function index()
     {
         $posts = $this->postRepository->all();
-
         $this->saveLogs($posts);
 
         return $posts->response()
-            ->setStatusCode(Response::HTTP_OK);
+            ->setStatusCode(Response::HTTP_OK);;
     }
 
     public function show($postId)

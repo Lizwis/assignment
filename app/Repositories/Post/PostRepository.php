@@ -11,7 +11,7 @@ class PostRepository implements PostRepositoryInterface
 
     public function all()
     {
-        $posts = Post::with('comments')->paginate(5);
+        $posts = Post::paginate(5);
         $postsCollection =  PostsResource::collection($posts);
 
         return $postsCollection;
