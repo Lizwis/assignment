@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Services\ApiLogger;
 use Illuminate\Http\Response;
 
+use App\Http\Requests\StorePostRequest;
+
 class PostController extends Controller
 {
     private $postRepository, $logger;
@@ -36,6 +38,14 @@ class PostController extends Controller
 
         return $post->response()
             ->setStatusCode(Response::HTTP_OK);
+    }
+
+    public function store(StorePostRequest $request)
+    {
+        $createPost = $this->postRepository->createPost($request);
+
+        return $createPost->response()
+            ->setStatusCode(Response::HTTP_CREATED);
     }
 
 

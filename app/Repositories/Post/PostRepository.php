@@ -25,7 +25,12 @@ class PostRepository implements PostRepositoryInterface
         return $postCollection;
     }
 
-    public function createPost()
+    public function createPost($request)
     {
+        $post = Auth()->user()->posts()->create($request->validated());
+
+        $postCollection =   new PostsResource($post);
+
+        return $postCollection;
     }
 }
