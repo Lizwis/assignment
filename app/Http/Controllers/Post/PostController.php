@@ -44,8 +44,27 @@ class PostController extends Controller
     {
         $createPost = $this->postRepository->createPost($request);
 
+        $this->saveLogs($createPost);
+
         return $createPost->response()
             ->setStatusCode(Response::HTTP_CREATED);
+    }
+
+    public function update($post_id, StorePostRequest $request)
+    {
+        $updatePost = $this->postRepository->updatePost($post_id, $request);
+
+        $this->saveLogs($updatePost);
+
+        return $updatePost->response()
+            ->setStatusCode(Response::HTTP_CREATED);
+    }
+
+    public function delete($post_id)
+    {
+        $post = $this->postRepository->deletePost($post_id);
+
+        return response($post, Response::HTTP_CREATED);
     }
 
 

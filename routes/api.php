@@ -4,10 +4,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Post\PostController;
-
 use App\Http\Controllers\User\UserController;
-
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Comment\CommentController;
+
 
 
 /*
@@ -29,10 +29,17 @@ Route::group(['prefix' => 'post'], function () {
     Route::get('/all', [PostController::class, 'index']);
     Route::get('/show/{postId}', [PostController::class, 'show']);
     Route::post('/store', [PostController::class, 'store'])->middleware('auth:sanctum');
+    Route::post('/update/{postId}', [PostController::class, 'update'])->middleware('auth:sanctum');
+    Route::post('/delete/{postId}', [PostController::class, 'delete'])->middleware('auth:sanctum');
 });
 
 Route::group(['prefix' => 'user'], function () {
     Route::get('/show/{user_id}', [UserController::class, 'show']);
+});
+
+Route::group(['prefix' => 'comment'], function () {
+    Route::get('/show/{comment_id}', [CommentController::class, 'show']);
+    Route::post('/delete/{comment_id}', [CommentController::class, 'delete'])->middleware('auth:sanctum');
 });
 
 Route::group(['prefix' => 'auth'], function () {

@@ -33,4 +33,24 @@ class PostRepository implements PostRepositoryInterface
 
         return $postCollection;
     }
+
+    public function updatePost($post_id, $request)
+    {
+        $post = Post::where('id', $post_id)->firstOrFail();
+
+        $post->update($request->validated());
+
+        $postCollection =   new PostsResource($post);
+
+        return $postCollection;
+    }
+
+    public function deletePost($postId)
+    {
+        $post = Post::where('id', $postId)->firstOrFail();
+
+        $post->delete();
+
+        return "post deleted successfully!";
+    }
 }
