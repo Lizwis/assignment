@@ -7,6 +7,7 @@ use App\Http\Controllers\Post\PostController;
 
 use App\Http\Controllers\User\UserController;
 
+use App\Http\Controllers\Auth\AuthController;
 
 
 /*
@@ -31,4 +32,10 @@ Route::group(['prefix' => 'post'], function () {
 
 Route::group(['prefix' => 'user'], function () {
     Route::get('/show/{user_id}', [UserController::class, 'show']);
+});
+
+Route::group(['prefix' => 'auth'], function () {
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');;
 });

@@ -8,10 +8,6 @@ use App\Http\Controllers\Controller;
 use App\Services\ApiLogger;
 use Illuminate\Http\Response;
 
-use App\Http\Resources\PostsResource;
-use App\Models\Post;
-
-
 class PostController extends Controller
 {
     private $postRepository, $logger;

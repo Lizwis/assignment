@@ -24,4 +24,8 @@ class PostRepository implements PostRepositoryInterface
 
         return $postCollection;
     }
+
+    public function createPost()
+    {
+    }
 }
