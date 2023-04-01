@@ -3,16 +3,15 @@
 namespace App\Repositories\Comment;
 
 use App\Repositories\Comment\CommentRepositoryInterface;
-use App\Http\Resources\PostsResource;
+use App\Http\Resources\CommentResource;
 use App\Models\Comment;
 
 class CommentRepository implements CommentRepositoryInterface
 {
     public function findCommentByid($commentId)
     {
-        $post = Comment::where('id', $commentId)->firstOrFail();
-
-        return $post;
+        $comment = Comment::where('id', $commentId)->firstOrFail();
+        return new CommentResource($comment);
     }
 
     public function deleteComment($commentId)

@@ -26,7 +26,9 @@ class CommentController extends Controller
 
         $this->saveLogs($comment);
 
-        return response()->json($comment, Response::HTTP_OK);
+
+        return $comment->response()
+            ->setStatusCode(Response::HTTP_OK);
     }
 
     public function delete($commentId)

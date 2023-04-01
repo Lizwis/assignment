@@ -24,18 +24,21 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = $this->categoryRepository->showAll();
+
         $this->saveLogs($categories);
 
-        // return $categories->response()
-        //     ->setStatusCode(Response::HTTP_OK);;
-        return response()->json($categories, Response::HTTP_OK);
+        return $categories->response()
+            ->setStatusCode(Response::HTTP_OK);
     }
 
     public function show($category_id)
     {
         $category = $this->categoryRepository->findById($category_id);
+
         $this->saveLogs($category);
-        return response()->json($category, Response::HTTP_OK);
+
+        return $category->response()
+            ->setStatusCode(Response::HTTP_OK);
     }
 
     private function saveLogs($data)
