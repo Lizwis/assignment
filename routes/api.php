@@ -7,6 +7,8 @@ use App\Http\Controllers\Post\PostController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Comment\CommentController;
+use App\Http\Controllers\Category\CategoryController;;
+
 
 
 
@@ -41,6 +43,12 @@ Route::group(['prefix' => 'comment'], function () {
     Route::get('/show/{comment_id}', [CommentController::class, 'show']);
     Route::post('/delete/{comment_id}', [CommentController::class, 'delete'])->middleware('auth:sanctum');
 });
+
+Route::group(['prefix' => 'category'], function () {
+    Route::get('/all', [CategoryController::class, 'index']);
+    Route::get('/show/{category_id}', [CategoryController::class, 'show']);
+});
+
 
 Route::group(['prefix' => 'auth'], function () {
     Route::post('/register', [AuthController::class, 'register']);
