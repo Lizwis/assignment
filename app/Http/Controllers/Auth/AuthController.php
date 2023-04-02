@@ -4,23 +4,12 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 
-use App\Repositories\Auth\AuthRepositoryInterface;
-use App\Services\ApiLogger;
 use Illuminate\Http\Response;
-
-
+use App\Http\Controllers\ConstructorTrait;
 
 class AuthController extends Controller
 {
-    private $authRepository, $logger;
-
-
-    public function __construct(AuthRepositoryInterface $authRepository, ApiLogger $logger)
-    {
-        $this->authRepository = $authRepository;
-        $this->logger = $logger;
-    }
-
+    use ConstructorTrait;
 
     public function register()
     {

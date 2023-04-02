@@ -4,20 +4,13 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
-use App\Repositories\User\UserRepositoryInterface;
-use App\Services\ApiLogger;
+use App\Http\Controllers\ConstructorTrait;
 
 
 class UserController extends Controller
 {
+    use ConstructorTrait;
 
-    private $userRepository, $logger;
-
-    public function __construct(UserRepositoryInterface $userRepository, ApiLogger $logger)
-    {
-        $this->userRepository = $userRepository;
-        $this->logger = $logger;
-    }
 
     public function show($user_id)
     {

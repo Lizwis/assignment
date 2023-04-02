@@ -3,29 +3,19 @@
 namespace App\Http\Controllers\Comment;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-
-use App\Repositories\Comment\CommentRepositoryInterface;
-use App\Services\ApiLogger;
+use App\Http\Controllers\ConstructorTrait;
 use Illuminate\Http\Response;
 
 
 class CommentController extends Controller
 {
-    private $commentRepository, $logger;
-
-    public function __construct(CommentRepositoryInterface $commentRepository, ApiLogger $logger)
-    {
-        $this->commentRepository = $commentRepository;
-        $this->logger = $logger;
-    }
+    use ConstructorTrait;
 
     public function show($commentId)
     {
         $comment = $this->commentRepository->findCommentByid($commentId);
 
         $this->saveLogs($comment);
-
 
         return $comment->response()
             ->setStatusCode(Response::HTTP_OK);

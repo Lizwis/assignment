@@ -2,24 +2,17 @@
 
 namespace App\Http\Controllers\Post;
 
-use App\Repositories\Post\PostRepositoryInterface;
+use App\Http\Controllers\ConstructorTrait;
 
 use App\Http\Controllers\Controller;
-use App\Services\ApiLogger;
 use Illuminate\Http\Response;
 
 use App\Http\Requests\StorePostRequest;
 
 class PostController extends Controller
 {
-    private $postRepository, $logger;
+    use ConstructorTrait;
 
-
-    public function __construct(PostRepositoryInterface $postRepository, ApiLogger $logger)
-    {
-        $this->postRepository = $postRepository;
-        $this->logger = $logger;
-    }
 
     public function index()
     {
