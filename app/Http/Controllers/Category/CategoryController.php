@@ -25,6 +25,8 @@ class CategoryController extends Controller
     {
         $category = $this->categoryRepository->findById($category_id);
         $this->saveLogs($category);
+        return $category->response()
+            ->setStatusCode(Response::HTTP_OK);;
     }
 
     private function saveLogs($data)
