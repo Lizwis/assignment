@@ -33,9 +33,10 @@ class PostController extends Controller
             ->setStatusCode(Response::HTTP_OK);
     }
 
-    public function store(StorePostRequest $request)
+    public function store()
     {
-        $createPost = $this->postRepository->createPost($request);
+
+        $createPost = $this->postRepository->createPost(request()->all());
 
         $this->saveLogs($createPost);
 
@@ -43,9 +44,10 @@ class PostController extends Controller
             ->setStatusCode(Response::HTTP_CREATED);
     }
 
-    public function update($post_id, StorePostRequest $request)
+    public function update($post_id)
     {
-        $updatePost = $this->postRepository->updatePost($post_id, $request);
+
+        $updatePost = $this->postRepository->updatePost($post_id, request()->all());
 
         $this->saveLogs($updatePost);
 

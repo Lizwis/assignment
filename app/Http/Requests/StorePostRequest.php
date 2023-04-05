@@ -3,6 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Validation\ValidationException;
 
 class StorePostRequest extends FormRequest
 {
@@ -12,6 +15,18 @@ class StorePostRequest extends FormRequest
     public function authorize(): bool
     {
         return true;
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        if ($this->json()) {
+
+            throw new HttpResponseException(response()->json($validator->errors(), 422));
+        } else {
+            throw (new ValidationException($validator))
+                ->errorBag($this->errorBag)
+                ->redirectTo($this->getRedirectUrl());
+        }
     }
 
     /**

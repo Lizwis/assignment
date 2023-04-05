@@ -5,6 +5,8 @@ namespace App\Repositories\Post;
 use App\Repositories\Post\PostRepositoryInterface;
 use App\Http\Resources\PostsResource;
 use App\Models\Post;
+use App\Http\Requests\StorePostRequest;
+
 
 class PostRepository implements PostRepositoryInterface
 {
@@ -27,6 +29,8 @@ class PostRepository implements PostRepositoryInterface
 
     public function createPost($request)
     {
+        $request = app(StorePostRequest::class);
+
         $post = Auth()->user()->posts()->create($request->validated());
 
         $postCollection =   new PostsResource($post);
@@ -36,6 +40,8 @@ class PostRepository implements PostRepositoryInterface
 
     public function updatePost($post_id, $request)
     {
+        $request = app(StorePostRequest::class);
+
         $post = Post::where('id', $post_id)->firstOrFail();
 
         $post->update($request->validated());
